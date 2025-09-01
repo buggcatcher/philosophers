@@ -1,0 +1,73 @@
+#include "philo.h"
+
+static int	dead_loop(t_philo *philo)
+{
+	pthread_mutex_lock(philo->dead_lock);
+	if (*philo->dead == 1)
+		return (pthread_mutex_unlock(philo->dead_lock), 1);
+	pthread_mutex_unlock(philo->dead_lock);
+	return (0);
+}
+
+static void	*philo_routine(void *pointer)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)pointer;
+	if (philo->id % 2 == 0)
+		ft_usleep(1);
+	while (!dead_loop(philo))
+	{
+		philo_eat(philo);
+		philo_sleep(philo);
+		philo_think(philo);
+	}
+	return (pointer);
+}
+
+int	thread_create(t_simulation *simulation, pthread_mutex_t *forks)
+{
+	pthread_t	monitor;
+	int			i;
+
+	if (pthread_create(&monitor, NULL, &monitoring, simulation->philos) != 0)
+		destroy_all("error: pthread_create", simulation, forks);
+	i = 0;
+	while (i < simulation->philos[0].args->philo_nbr)
+	{
+		if (pthread_create(&simulation->philos[i].thread, NULL, &philo_routine,
+				&simulation->philos[i]) != 0)
+			destroy_all("error: pthread_create", simulation, forks);
+		i++;
+	}
+	i = 0;
+	if (pthread_join(monitor, NULL) != 0)
+		destroy_all("error: pthread_join", simulation, forks);
+	while (i < simulation->philos[0].args->philo_nbr)
+	{
+		if (pthread_join(simulation->philos[i].thread, NULL) != 0)
+			destroy_all("error: pthread_join", simulation, forks);
+		i++;
+	}
+	return (0);
+}
+
+void	destroy_all(char *str, t_simulation *simulation, pthread_mutex_t *forks)
+{
+	int	i;
+
+	i = 0;
+	if (str)
+	{
+		write(2, str, ft_strlen(str));
+		write(2, "\n", 1);
+	}
+	pthread_mutex_destroy(&simulation->write_lock);
+	pthread_mutex_destroy(&simulation->meal_lock);
+	pthread_mutex_destroy(&simulation->dead_lock);
+	while (i < simulation->philos[0].args->philo_nbr)
+	{
+		pthread_mutex_destroy(&forks[i]);
+		i++;
+	}
+}
