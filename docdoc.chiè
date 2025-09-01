@@ -1,0 +1,13 @@
+forse il processo padre deve aspettare che tutti gli altri processi diano conferma che sono inizializzati prima di partire per risolvere problemi di helgrind.
+ci sono dei suppressed che non ho idea del perchè appaiano.
+
+forse:
+The locks held during the write are two mutexes, and during the read, one mutex. This means that the write is protected by two locks, but the read is only protected by one, and they might not be the same locks, hence the data race.
+ 
+poi:
+Nel codice corrente, le scritture su philo->eating (impostazione a 1 e a 0) non sono protette da alcun mutex, mentre la lettura in philosopher_is_dead è protetta da meal_lock. Questo crea una race condition.
+Soluzione: Proteggere tutte le scritture su eating con meal_lock. Modificare la funzione ft_eat.
+
+poi:
+Nel codice corrente, i filosofi acquisiscono sempre prima la forchetta destra e poi la sinistra. Tuttavia, a causa della disposizione circolare delle forchette, l'ordine effettivo dei lock non è consistente tra tutti i filosofi (ad esempio, il filosofo 0 acquisisce prima la forchetta N-1 e poi la 0, mentre il filosofo 1 acquisisce prima la forchetta 0 e poi la 1).
+Soluzione: Acquisire sempre le forchette in ordine basato sul loro indirizzo (o indice) per garantire un ordine globale consistente. Modificare la funzione ft_eat per acquisire prima la forchetta con indirizzo più basso.
