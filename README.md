@@ -2,7 +2,7 @@
 
 ## About
 This project is an implementation of the **Dining Philosophers problem**, a classic exercise in computer science and operating systems.  
-The problem describes a group of philosophers sitting around a table with a fork between each of them. Each philosopher alternates between **thinking** and **eating**, but in order to eat they need to pick up both forks beside them.  
+The problem describes a group of philosophers sitting around a table with a fork between each of them. Each philosopher alternates between **eating**, **sleeping** and **thinking**, but in order to eat they need to pick up both forks beside them.  
 This scenario demonstrates the challenges of **synchronization, concurrency, and deadlock avoidance** in shared-resource systems.
 
 ## Implementation
