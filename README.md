@@ -24,4 +24,10 @@ By working on this project, I deepened my understanding of key concepts such as:
 - Thread safety  
 - Resource sharing and management  
 
+tests
+./philo/philo 6 200 100 100 6 | ./visualizer/philogramm 20 -f -n
+(image)
+./philo/philo 7 400 100 100 5 | ./visualizer/philogramm 20 -f -n
+(image)
+
 
