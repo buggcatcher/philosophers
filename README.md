@@ -25,11 +25,14 @@ By working on this project, I deepened my understanding of key concepts such as:
 - Resource sharing and management  
 
 ## Tests
+```
 ./philo/philo 6 200 100 100 6 | ./visualizer/philogramm 20 -f -n
+```
 ![6_200_100_100_6](https://raw.githubusercontent.com/buggcatcher/public/main/6_200_100_100_6.png)  
 
-
+```
 ./philo/philo 7 400 100 100 5 | ./visualizer/philogramm 20 -f -n
+```
 ![7_400_100_100_5](https://raw.githubusercontent.com/buggcatcher/public/main/7_400_100_100_5.png)
 
 
